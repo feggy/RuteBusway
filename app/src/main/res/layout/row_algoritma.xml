@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="10dp">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/vNama"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Umban Sari"
+        android:textColor="#292929"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:paddingTop="10dp"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/vLat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Latitude 0.5121679"
+        android:textSize="12sp"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/vLng"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Longitude 101.359754"
+        android:textSize="12sp"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/vJarak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jarak 3.57 Km"
+        android:textColor="#E42121"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/tvWaktu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Waktu tempuh: 10 menit"
+        android:textColor="@color/green_dark"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="#292929"
+        android:alpha="0.2"
+        android:layout_marginRight="10dp"/>
+
+</LinearLayout>
