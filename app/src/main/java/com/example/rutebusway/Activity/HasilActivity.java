@@ -93,7 +93,7 @@ public class HasilActivity extends AppCompatActivity {
                                         arrayList = new ArrayList();
                                         jsonArray = jsonObject.getJSONArray("data");
 
-                                        for (int i = 0; i < 10; i++) {
+                                        for (int i = 0; i < jsonArray.length(); i++) {
                                             data = jsonArray.getJSONObject(i);
                                             strJarak = data.getString("km");
                                             strNama = data.getString("daerah");
