@@ -2,15 +2,24 @@ package com.example.rutebusway.Models;
 
 public class Algoritma {
 
-    public String nama, lat, lng, jarak, waktu;
+    public String id, nama, lat, lng, jarak, waktu;
 //    double jarak;
 
-    public Algoritma(String nama, String lat, String lng, String jarak, String waktu) {
+    public Algoritma(String id, String nama, String lat, String lng, String jarak, String waktu) {
+        this.id = id;
         this.nama = nama;
         this.lat = lat;
         this.lng = lng;
         this.jarak = jarak;
         this.waktu = waktu;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getNama() {

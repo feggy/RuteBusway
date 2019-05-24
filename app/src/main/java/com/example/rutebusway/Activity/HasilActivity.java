@@ -1,6 +1,7 @@
 package com.example.rutebusway.Activity;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -12,7 +13,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -52,6 +55,7 @@ public class HasilActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     String strNama, strLat, strLng, strJarak, strWaktu;
     ArrayList<Algoritma> arrayList;
+    String noBus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +99,7 @@ public class HasilActivity extends AppCompatActivity {
 
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             data = jsonArray.getJSONObject(i);
+                                            String id = data.getString("id");
                                             strJarak = data.getString("km");
                                             strNama = data.getString("daerah");
                                             strLat = data.getString("lat");
@@ -104,7 +109,7 @@ public class HasilActivity extends AppCompatActivity {
                                             /*double waktu = (Double.parseDouble(strJarak) / 50)*60;
                                             int w = (int) waktu;*/
 
-                                            Algoritma algoritma = new Algoritma(strNama, strLat, strLng, strJarak, strWaktu);
+                                            Algoritma algoritma = new Algoritma(id, strNama, strLat, strLng, strJarak, strWaktu);
                                             arrayList.add(algoritma);
 
 //                                            Log.e("Data", "nama "+strNama+" waktu "+waktu);
@@ -149,16 +154,78 @@ public class HasilActivity extends AppCompatActivity {
                 recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Algoritma get = arrayList.get(position);
-                        String gNama = get.getNama();
-                        String gLat = get.getLat();
-                        String gLng = get.getLng();
 
-                        Intent i = new Intent(HasilActivity.this, DirectionActivity.class);
-                        i.putExtra("nama", gNama);
-                        i.putExtra("lat", gLat);
-                        i.putExtra("lng", gLng);
-                        startActivity(i);
+
+                        Dialog dialog = new Dialog(HasilActivity.this);
+                        dialog.setContentView(R.layout.dialog_hasil);
+
+                        Algoritma get = arrayList.get(position);
+                        final String id = get.getId();
+                        final String gNama = get.getNama();
+                        final String gLat = get.getLat();
+                        final String gLng = get.getLng();
+
+                        Log.e("get", id+" "+gNama+" "+gLat+" "+gLng);
+
+                        final TextView vNama = dialog.findViewById(R.id.vNama);
+                        final TextView vBus = dialog.findViewById(R.id.vNoBus);
+                        final TextView vLat = dialog.findViewById(R.id.vLat);
+                        final TextView vLng = dialog.findViewById(R.id.vLng);
+
+                        Button button = dialog.findViewById(R.id.btnOke);
+
+                        StringRequest stringRequest = new StringRequest(
+                                Request.Method.GET,
+                                Constants.busway+"/"+id,
+                                new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        try {
+                                            JSONObject ob = new JSONObject(response);
+
+                                            if (!ob.getString("status").equals("fail")){
+                                                JSONObject da = ob.getJSONObject("data");
+                                                noBus = da.getString("nama_bus");
+
+                                                vNama.setText(gNama);
+                                                vBus.setText("Bus nomor "+noBus);
+                                                vLat.setText(gLat);
+                                                vLng.setText(gLng);
+                                            } else {
+                                                vNama.setText(gNama);
+                                                vBus.setText("Bus tidak di temukan");
+                                                vLat.setText(gLat);
+                                                vLng.setText(gLng);
+                                            }
+
+                                            Log.e("noBus", noBus);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                            Log.e("ERR", e.toString());
+                                        }
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Toast.makeText(getApplicationContext(), "gagal", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+                        RequestHandler.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+
+                        button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent i = new Intent(HasilActivity.this, DirectionActivity.class);
+                                i.putExtra("nama", gNama);
+                                i.putExtra("lat", gLat);
+                                i.putExtra("lng", gLng);
+                                startActivity(i);
+                            }
+                        });
+
+                        dialog.show();
                     }
                 }));
             }
