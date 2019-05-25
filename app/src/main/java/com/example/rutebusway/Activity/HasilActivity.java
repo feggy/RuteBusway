@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -171,8 +172,13 @@ public class HasilActivity extends AppCompatActivity {
                         final TextView vBus = dialog.findViewById(R.id.vNoBus);
                         final TextView vLat = dialog.findViewById(R.id.vLat);
                         final TextView vLng = dialog.findViewById(R.id.vLng);
+                        final LinearLayout vProgressBar = dialog.findViewById(R.id.vProgressBar);
+                        final LinearLayout lnyData = dialog.findViewById(R.id.lnyData);
 
                         Button button = dialog.findViewById(R.id.btnOke);
+
+                        vProgressBar.setVisibility(View.VISIBLE);
+                        lnyData.setVisibility(View.INVISIBLE);
 
                         StringRequest stringRequest = new StringRequest(
                                 Request.Method.GET,
@@ -198,6 +204,9 @@ public class HasilActivity extends AppCompatActivity {
                                                 vLng.setText(gLng);
                                             }
 
+                                            vProgressBar.setVisibility(View.GONE);
+                                            lnyData.setVisibility(View.VISIBLE);
+
                                             Log.e("noBus", noBus);
                                         } catch (JSONException e) {
                                             e.printStackTrace();
@@ -208,7 +217,7 @@ public class HasilActivity extends AppCompatActivity {
                                 new Response.ErrorListener() {
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
-                                        Toast.makeText(getApplicationContext(), "gagal", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getApplicationContext(), "Gagal terhubung ke server", Toast.LENGTH_LONG).show();
                                     }
                                 });
 
